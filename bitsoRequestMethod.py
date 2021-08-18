@@ -25,5 +25,6 @@ def requestHandle(http_method, request_path, parameters):
     response = requests.get("https://api.bitso.com" + request_path, headers={"Authorization": auth_header})
   elif (http_method == "POST"):
     response = requests.post("https://api.bitso.com" + request_path, json = parameters, headers={"Authorization": auth_header})
-
+  elif(http_method == "DELETE"):
+    response = requests.delete("https://api.bitso.com" + request_path, headers={"Authorization": auth_header})
   return response.content
