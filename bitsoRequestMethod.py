@@ -21,7 +21,6 @@ def requestHandle(http_method, request_path, parameters):
 
   auth_header = 'Bitso %s:%s:%s' % (bitso_key, nonce, signature)
 
-  # Send request
   if (http_method == "GET"):
     response = requests.get("https://api.bitso.com" + request_path, headers={"Authorization": auth_header})
   elif (http_method == "POST"):
