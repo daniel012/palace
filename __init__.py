@@ -10,14 +10,18 @@ import sqlalchemy as sql
 from sqlalchemy.sql.expression import join
 from datetime import datetime
 import time 
+import configparser
+
+config = configparser.ConfigParser()
+config.read('configuration.ini')
+
 
 def extracBitsoapi():
-    response  = requests.get('https://api.bitso.com/v3/trades/?book=btc_mxn')
+    response  = requests.get(config['Bitso']['domain']+'trades/?book=btc_mxn')
     json_response = response.json()
     datos = json_response['payload']
     df = pd.DataFrame(datos)
-
-    engine = sql.create_engine('mysql+pymysql://admin:1234689h0lA@palace.cluster-cnnnw4vopgyu.us-east-2.rds.amazonaws.com/palace')
+    engine = sql.create_engine('mysql+pymysql://'+config['AWS']['User']+':'+config['AWS']['Password']+'@'+config['AWS']['Address']+'/'+config['AWS']['DB'])
 
     initial_q = """INSERT  INTO bitso_trades
     (book, created_at , amount, maker_side, price, tid)

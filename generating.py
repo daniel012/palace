@@ -3,13 +3,15 @@ import hmac
 import hashlib
 import requests
 import json
+import configparser
 
-
-bitso_key = "BITSO_KEY"
-bitso_secret = "BITSO_SECRET"
-http_method = "GET" # Change to POST if endpoint requires data
+config = configparser.ConfigParser()
+config.read('configuration.ini')
+bitso_key = config['Bitso']['key']
+bitso_secret = config['Bitso']['secret']
+http_method = "GET" 
 request_path = "/v3/balance/"
-parameters = {}     # Needed for POST endpoints requiring data
+parameters = {}     
 
 # Create signature
 nonce =  str(int(round(time.time() * 1000)))
@@ -20,7 +22,6 @@ signature = hmac.new(bitso_secret.encode('utf-8'),
                                             message.encode('utf-8'),
                                             hashlib.sha256).hexdigest()
 
-# Build the auth header
 auth_header = 'Bitso %s:%s:%s' % (bitso_key, nonce, signature)
 
 # Send request
