@@ -6,11 +6,11 @@ created: jesus oliveros
 from datetime import datetime
 import pandas as pd
 import requests
-import sqlalchemy as sql
 from sqlalchemy.sql.expression import join
 from datetime import datetime
 import time 
 import configparser
+from sql_handle import execute_query
 
 config = configparser.ConfigParser()
 config.read('configuration.ini')
@@ -21,7 +21,6 @@ def extracBitsoapi():
     json_response = response.json()
     datos = json_response['payload']
     df = pd.DataFrame(datos)
-    engine = sql.create_engine('mysql+pymysql://'+config['AWS']['User']+':'+config['AWS']['Password']+'@'+config['AWS']['Address']+'/'+config['AWS']['DB'])
 
     initial_q = """INSERT  INTO bitso_trades
     (book, created_at , amount, maker_side, price, tid)
@@ -47,7 +46,8 @@ def extracBitsoapi():
 
     query = initial_q + values_q + end_q
 
-    engine.execute(query)
+    execute_query(query)
+
     return
 
 while True:
