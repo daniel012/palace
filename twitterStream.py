@@ -13,8 +13,8 @@ access_token_secret= config['twitter']['secretToken']
 
 
 def extract_data(data):
-    raw_json = json.load(data)
-    id_srt = raw_json['id_srt']
+    raw_json = json.loads(data)
+    id_str = raw_json['id_str']
     language = raw_json['lang']
     timestamp = raw_json['timestamp_ms']
     user = raw_json['user']['screen_name']
@@ -24,7 +24,7 @@ def extract_data(data):
     user_followers = raw_json['user']['followers_count']
     user_statuses = raw_json['user']['statuses_count']
     user_creation = raw_json['user']['created_at']
-    return [id_srt,
+    return [id_str,
         language,
         timestamp,
         user,
@@ -33,15 +33,16 @@ def extract_data(data):
         user_friends,
         user_followers,
         user_statuses,
-        user_creation]
+        user_creation
+        ]
 
 class StdOutListener(StreamListener):
     """ A listener handles tweets that are received from the stream.
     This is a basic listener that just prints received tweets to stdout.
     """
     def on_data(self, data):
-        # test = extract_data(data)
-        print(data)
+        test = extract_data(data)
+        print(test)
         return True
 
     def on_error(self, status):
@@ -53,4 +54,4 @@ if __name__ == '__main__':
     auth.set_access_token(access_token, access_token_secret)
 
     stream = Stream(auth, l)
-    stream.filter(track=['basketball'])
+    stream.filter(track=['venezuela'])
